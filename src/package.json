@@ -1,0 +1,25 @@
+{
+  "name": "matrixcreator_vad_everloop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/efog/matrixcreator_vad_everloop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/efog/matrixcreator_vad_everloop/issues"
+  },
+  "homepage": "https://github.com/efog/matrixcreator_vad_everloop#readme",
+  "dependencies": {
+    "eslint": "^5.16.0",
+    "mic": "^2.1.2",
+    "node-vad": "^1.1.2"
+  }
+}
