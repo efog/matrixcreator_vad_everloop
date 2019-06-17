@@ -26,6 +26,7 @@ const ledImage = matrixIO.malos.v1.io.EverloopImage.create();
  * @returns {undefined}
  */
 function show(red = 0, green = 0, blue = 0, white = 0) {
+    debug(`requesting to show leds x ${matrixDeviceLeds} color: ${red} ${green} ${blue} ${white}`);
     for (let idx = 0; idx < matrixDeviceLeds; ++idx) {
         // Set individual LED value
         ledImage.led[idx] = {
@@ -68,7 +69,7 @@ const micInstance = mic({
     "debug": true
 });
 debug(`getting audio stream`);
-show(200, 200, 200, 0);
+show(200, 200, 200, 200);
 const micInputStream = micInstance.getAudioStream();
 setTimeout(() => {
     show(0, 0, 0, 0);
