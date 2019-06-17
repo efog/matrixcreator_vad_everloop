@@ -67,8 +67,13 @@ const micInstance = mic({
     "channels": 1,
     "debug": true
 });
-debug(`getting auio stream`);
+debug(`getting audio stream`);
+show(200, 200, 200, 0);
 const micInputStream = micInstance.getAudioStream();
+setTimeout(() => {
+    show(0, 0, 0, 0);
+}, 5000);
+debug(`got audio stream`);
 const vad = new VAD(VAD.Mode.NORMAL);
 micInputStream.on("data", (chunk) => {
     debug(`received mic data`);
