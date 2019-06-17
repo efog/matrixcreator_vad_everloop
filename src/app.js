@@ -91,9 +91,10 @@ const micInstance = mic({
     "channels": 5,
     "debug": true
 });
+debug(`got microphone instance ${JSON.stringify(micInstance)}`);
 debug(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
-debug(`got audio stream`);
+debug(`got audio stream ${JSON.stringify(micInputStream)}`);
 const outStream = VAD.createStream({
     "mode": VAD.Mode.NORMAL,
     "audioFrequency": 16000,
