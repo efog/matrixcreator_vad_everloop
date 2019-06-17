@@ -92,11 +92,7 @@ const micInstance = mic({
     "debug": true
 });
 debug(`getting audio stream`);
-show(200, 200, 200, 200);
 const micInputStream = micInstance.getAudioStream();
-setTimeout(() => {
-    show(0, 0, 0, 0);
-}, 5000);
 debug(`got audio stream`);
 const vad = new VAD(VAD.Mode.NORMAL);
 micInputStream.on("data", (chunk) => {
@@ -124,3 +120,10 @@ micInputStream.on("data", (chunk) => {
     })
         .catch(console.error);
 });
+
+setTimeout(() => { 
+    show(200, 200, 200, 200); 
+}, 500);
+setTimeout(() => {
+    show(0, 0, 0, 0);
+}, 5000);
