@@ -19,7 +19,9 @@
   "homepage": "https://github.com/efog/matrixcreator_vad_everloop#readme",
   "dependencies": {
     "eslint": "^5.16.0",
+    "matrix-protos": "0.0.28",
     "mic": "^2.1.2",
-    "node-vad": "^1.1.2"
+    "node-vad": "^1.1.2",
+    "zeromq": "^5.1.0"
   }
 }
