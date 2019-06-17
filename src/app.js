@@ -88,7 +88,7 @@ errorSocket.on("message", function(errorMessage) {
 debug(`creating microphone instance`);
 const micInstance = mic({
     "rate": 16000,
-    "channels": 5,
+    "channels": 1,
     "debug": true
 });
 debug(`got microphone instance ${JSON.stringify(micInstance)}`);
@@ -100,6 +100,7 @@ const outStream = VAD.createStream({
     "audioFrequency": 16000,
     "debounceTime": 1000
 });
+debug(`got vad stream ${JSON.stringify(outStream)}`);
 micInputStream.pipe(outStream).on("data", (data) => {
     debug(`received data : ${data}`);
 });
