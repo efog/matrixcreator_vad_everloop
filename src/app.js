@@ -88,13 +88,12 @@ errorSocket.on("message", function(errorMessage) {
 debug(`creating microphone instance`);
 const micInstance = mic({
     "rate": 16000,
-    "channels": 1,
+    "channels": 5,
     "debug": true
 });
 debug(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
 debug(`got audio stream`);
-const vad = new VAD(VAD.Mode.NORMAL);
 const outStream = VAD.createStream({
     "mode": VAD.Mode.NORMAL,
     "audioFrequency": 16000,
@@ -103,6 +102,7 @@ const outStream = VAD.createStream({
 micInputStream.pipe(outStream).on("data", (data) => {
     debug(`received data : ${data}`);
 });
+// const vad = new VAD(VAD.Mode.NORMAL);
 // micInputStream.on("data", (chunk) => {
 //     debug(`received mic data`);
 //     vad.processAudio(chunk, 16000).then((res) => {
@@ -134,4 +134,4 @@ setTimeout(() => {
 }, 500);
 setTimeout(() => {
     show(0, 0, 0, 0);
-}, 5000);
+}, 600);
