@@ -1,4 +1,5 @@
 const VAD = require("node-vad");
+const debug = require("debug")("app:app.js");
 const matrixIO = require("matrix-protos").matrix_io;
 const matrixIP = "127.0.0.1";
 const matrixEverloopBasePort = 20021;
@@ -6,9 +7,12 @@ let matrixDeviceLeds = 0;
 const mic = require("mic");
 const zmq = require("zeromq");
 
-
+debug(`starting`);
+debug(`setting up config socket`);
 const configSocket = zmq.socket("push");
+debug(`connecting config socket`);
 configSocket.connect(`tcp://${matrixIP}:${matrixEverloopBasePort}`);
+debug(`creating led image placeholder`);
 const ledImage = matrixIO.malos.v1.io.EverloopImage.create();
 
 /**
@@ -38,25 +42,33 @@ function show(red = 0, green = 0, blue = 0, white = 0) {
     }
 }
 
+debug(`setting up update socket`);
 const updateSocket = zmq.socket("sub");
 // Connect Subscriber to Data Update port
+debug(`connecting update socket`);
 updateSocket.connect(`"tcp://${matrixIP}:${(matrixEverloopBasePort + 3)}`);
 // Subscribe to messages
+debug(`subscribing to update socket`);
 updateSocket.subscribe("");
 // On Message
 updateSocket.on("message", function(buffer) {
+    debug(`message received from update socket`);
     const data = matrixIO.malos.v1.io.EverloopImage.decode(buffer);
+    debug(`data received from update socket: ${JSON.stringify(data)}`);
     matrixDeviceLeds = data.everloopLength;
 });
 
+debug(`creating microphone instance`);
 const micInstance = mic({
     "rate": 16000,
     "channels": 1,
     "debug": true
 });
+debug(`getting auio stream`);
 const micInputStream = micInstance.getAudioStream();
 const vad = new VAD(VAD.Mode.NORMAL);
 micInputStream.on("data", (chunk) => {
+    debug(`received mic data`);
     vad.processAudio(chunk, 16000).then((res) => {
         // eslint-disable-next-line default-case
         switch (res) {
