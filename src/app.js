@@ -44,12 +44,12 @@ function show(red = 0, green = 0, blue = 0, white = 0) {
 }
 
 debug(`setting up update socket`);
-const updateSocket = zmq.socket('sub');
+const updateSocket = zmq.socket("sub");
 // Connect Subscriber to Data Update port
 debug(`connecting update socket`);
 const updatePort = matrixEverloopBasePort + 3;
 debug(`connection to tcp://${matrixIP}:${updatePort}`);
-updateSocket.connect(`"tcp://${matrixIP}:${updatePort}`);
+updateSocket.connect(`tcp://${matrixIP}:${updatePort}`);
 // Subscribe to messages
 debug(`subscribing to update socket`);
 updateSocket.subscribe("");
