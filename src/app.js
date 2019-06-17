@@ -95,34 +95,42 @@ debug(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
 debug(`got audio stream`);
 const vad = new VAD(VAD.Mode.NORMAL);
-micInputStream.on("data", (chunk) => {
-    debug(`received mic data`);
-    vad.processAudio(chunk, 16000).then((res) => {
-        // eslint-disable-next-line default-case
-        switch (res) {
-        case VAD.Event.ERROR:
-            show(250, 0, 0, 0);
-            console.log("ERROR");
-            break;
-        case VAD.Event.NOISE:
-            show(0, 250, 250, 0);
-            console.log("NOISE");
-            break;
-        case VAD.Event.SILENCE:
-            show(0, 0, 0, 0);
-            console.log("SILENCE");
-            break;
-        case VAD.Event.VOICE:
-            show(0, 250, 0, 0);
-            console.log("VOICE");
-            break;
-        }
-    })
-        .catch(console.error);
+const outStream = VAD.createStream({
+    "mode": VAD.Mode.NORMAL,
+    "audioFrequency": 16000,
+    "debounceTime": 1000
 });
+micInputStream.pipe(outStream).on("data", (data) => {
+    debug(`received data : ${data}`);
+});
+// micInputStream.on("data", (chunk) => {
+//     debug(`received mic data`);
+//     vad.processAudio(chunk, 16000).then((res) => {
+//         // eslint-disable-next-line default-case
+//         switch (res) {
+//         case VAD.Event.ERROR:
+//             show(250, 0, 0, 0);
+//             console.log("ERROR");
+//             break;
+//         case VAD.Event.NOISE:
+//             show(0, 250, 250, 0);
+//             console.log("NOISE");
+//             break;
+//         case VAD.Event.SILENCE:
+//             show(0, 0, 0, 0);
+//             console.log("SILENCE");
+//             break;
+//         case VAD.Event.VOICE:
+//             show(0, 250, 0, 0);
+//             console.log("VOICE");
+//             break;
+//         }
+//     })
+//         .catch(console.error);
+// });
 
 setTimeout(() => { 
-    show(200, 200, 200, 0); 
+    show(100, 100, 100, 0); 
 }, 500);
 setTimeout(() => {
     show(0, 0, 0, 0);
