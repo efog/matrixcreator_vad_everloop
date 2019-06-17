@@ -11,6 +11,7 @@ debug(`starting`);
 debug(`setting up config socket`);
 const configSocket = zmq.socket("push");
 debug(`connecting config socket`);
+debug(`connection to tcp://${matrixIP}:${matrixEverloopBasePort}`);
 configSocket.connect(`tcp://${matrixIP}:${matrixEverloopBasePort}`);
 debug(`creating led image placeholder`);
 const ledImage = matrixIO.malos.v1.io.EverloopImage.create();
@@ -47,6 +48,7 @@ const updateSocket = zmq.socket("sub");
 // Connect Subscriber to Data Update port
 debug(`connecting update socket`);
 const updatePort = matrixEverloopBasePort + 3;
+debug(`connection to tcp://${matrixIP}:${updatePort}`);
 updateSocket.connect(`"tcp://${matrixIP}:${updatePort}`);
 // Subscribe to messages
 debug(`subscribing to update socket`);
