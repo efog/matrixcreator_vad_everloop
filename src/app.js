@@ -62,6 +62,29 @@ updateSocket.on("message", function(buffer) {
     matrixDeviceLeds = data.everloopLength;
 });
 
+// KEEP-ALIVE PORT \\
+// Create a Pusher socket
+const pingSocket = zmq.socket("push");
+// Connect Pusher to Keep-alive port
+pingSocket.connect(`tcp://${matrixIP}:${(matrixEverloopBasePort + 1)}`);
+// Send a single ping
+pingSocket.send("");
+setInterval(() => {
+    pingSocket.send("");
+}, 300);
+
+// ERROR PORT \\
+// Create a Subscriber socket
+const errorSocket = zmq.socket("sub");
+// Connect Subscriber to Error port
+errorSocket.connect(`tcp://${matrixIP}:${(matrixEverloopBasePort + 2)}`);
+// Connect Subscriber to Error port
+errorSocket.subscribe("");
+// On Message
+errorSocket.on("message", function(errorMessage) {
+    debug(`Error received: ${errorMessage.toString("utf8")}`);
+});
+
 debug(`creating microphone instance`);
 const micInstance = mic({
     "rate": 16000,
