@@ -71,7 +71,7 @@ pingSocket.connect(`tcp://${matrixIP}:${(matrixEverloopBasePort + 1)}`);
 pingSocket.send("");
 setInterval(() => {
     pingSocket.send("");
-}, 300);
+}, 1000);
 
 // ERROR PORT \\
 // Create a Subscriber socket
@@ -122,7 +122,7 @@ micInputStream.on("data", (chunk) => {
 });
 
 setTimeout(() => { 
-    show(200, 200, 200, 200); 
+    show(200, 200, 200, 0); 
 }, 500);
 setTimeout(() => {
     show(0, 0, 0, 0);
