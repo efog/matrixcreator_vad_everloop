@@ -46,7 +46,8 @@ debug(`setting up update socket`);
 const updateSocket = zmq.socket("sub");
 // Connect Subscriber to Data Update port
 debug(`connecting update socket`);
-updateSocket.connect(`"tcp://${matrixIP}:${(matrixEverloopBasePort + 3)}`);
+const updatePort = matrixEverloopBasePort + 3;
+updateSocket.connect(`"tcp://${matrixIP}:${updatePort}`);
 // Subscribe to messages
 debug(`subscribing to update socket`);
 updateSocket.subscribe("");
