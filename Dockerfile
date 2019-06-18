@@ -1,7 +1,6 @@
-FROM resin/rpi-raspbian
-
-RUN apt-get update && apt-get install lsb-release && apt-get install apt-transport-https --force-yes
-RUN apt-get update && apt-get upgrade
+FROM balenalib/raspberrypi3-debian-node:8.11-stretch as build
+RUN apt-get update && apt-get install -y lsb-release && apt-get -y install apt-transport-https curl
+RUN apt-get update -y && apt-get upgrade -y
 
 RUN curl https://apt.matrix.one/doc/apt-key.gpg | apt-key add -
 RUN echo "deb https://apt.matrix.one/raspbian $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/matrixlabs.list
@@ -9,16 +8,15 @@ RUN echo "deb https://apt.matrix.one/raspbian $(lsb_release -sc) main" | tee /et
 RUN touch /boot/config.txt
 RUN touch /boot/cmdline.txt
 RUN apt-get update && apt-get upgrade
-RUN apt-get install -y cmake g++ git libfftw3-dev wiringpi libgflags-dev matrixio-creator-init libmatrixio-creator-hal libmatrixio-creator-hal-dev
-
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
-RUN apt-get install -y build-essential
+RUN apt-get install -y systemd
+RUN apt-get install -y build-essential g++
+RUN apt-get install -y libasound2 alsa-utils alsa-oss python libmatrixio-creator-hal libmatrixio-creator-hal-dev
 
 WORKDIR /usr/src/app
 COPY src/package*.json ./
 RUN npm install
 COPY ./src .
+
 CMD [ "npm", "start" ]
 
 
