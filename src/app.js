@@ -228,5 +228,6 @@ const outStream = VAD.createStream({
 });
 info(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
-micInputStream.pipe(outStream).on("data", console.log);
+// micInputStream.pipe(outStream).on("data", console.log);
+micInputStream.on("data", console.log);
 micInstance.start();
