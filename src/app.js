@@ -137,6 +137,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
     const greenStart = currentLedState.green;
     const blueStart = currentLedState.blue;
     const whiteStart = currentLedState.white;
+    debug(`animating to ${JSON.stringify(currentLedTarget)}`);
     transitionInterval = setInterval(() => {
         currentLedState = {
             "red": Math.floor(tween(time, redStart, currentLedTarget.red, duration)),
@@ -144,7 +145,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
             "blue": Math.floor(tween(time, blueStart, currentLedTarget.blue, duration)),
             "white": Math.floor(tween(time, whiteStart, currentLedTarget.white, duration))
         };
-        debug(`animating from ${JSON.stringify(currentLedTarget)} to ${JSON.stringify(currentLedState)}`);
+        debug(`animating from ${JSON.stringify(currentLedState)}`);
         show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
         time += ledAnimationFreq;
     }, ledAnimationFreq);
