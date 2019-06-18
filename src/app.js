@@ -100,7 +100,7 @@ const outStream = VAD.createStream({
     "debounceTime": 1000
 });
 micInputStream.pipe(outStream).on("data", (data) => {
-    debug(`received data : ${JSON.stringify(data)}`);
+    debug(`received data : ${JSON.stringify(data.speech)}`);
 });
 micInstance.start();
 
