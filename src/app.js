@@ -1,19 +1,18 @@
 const VAD = require("node-vad");
 const debug = require("debug")("app:app.js");
+const matrix = require("@matrix-io/matrix-lite");
 const matrixIO = require("matrix-protos").matrix_io;
+const zmq = require("zeromq");
+
 const matrixIP = "127.0.0.1";
 const matrixEverloopBasePort = 20021;
+const vad = new VAD(VAD.Mode.NORMAL);
 let matrixDeviceLeds = 0;
-const mic = require("mic");
-const zmq = require("zeromq");
 
 debug(`starting`);
 debug(`setting up config socket`);
 const configSocket = zmq.socket("push");
-debug(`connecting config socket`);
-debug(`connection to tcp://${matrixIP}:${matrixEverloopBasePort}`);
 configSocket.connect(`tcp://${matrixIP}:${matrixEverloopBasePort}`);
-debug(`creating led image placeholder`);
 const ledImage = matrixIO.malos.v1.io.EverloopImage.create();
 
 /**
@@ -44,64 +43,74 @@ function show(red = 0, green = 0, blue = 0, white = 0) {
     }
 }
 
+/**
+ * Handle audio stream chunk
+ *
+ * @param {*} chunk audio stream chunk
+ * @returns {undefined}
+ */
+function handle(chunk) {
+    debug(`${JSON.stringify(chunk)}`);
+    vad.processAudio(chunk.audioData, 16000).then((res) => {
+        switch (res) {
+        case VAD.Event.ERROR:
+            console.log("ERROR");
+            break;
+        case VAD.Event.NOISE:
+            console.log("NOISE");
+            break;
+        case VAD.Event.SILENCE:
+            console.log("SILENCE");
+            break;
+        case VAD.Event.VOICE:
+            console.log("VOICE");
+            break;
+        default:
+            console.log("WTF");
+
+        }
+    });
+}
+
 debug(`setting up update socket`);
 const updateSocket = zmq.socket("sub");
-// Connect Subscriber to Data Update port
-debug(`connecting update socket`);
 const updatePort = matrixEverloopBasePort + 3;
-debug(`connection to tcp://${matrixIP}:${updatePort}`);
 updateSocket.connect(`tcp://${matrixIP}:${updatePort}`);
-// Subscribe to messages
-debug(`subscribing to update socket`);
 updateSocket.subscribe("");
-// On Message
 updateSocket.on("message", function(buffer) {
-    debug(`message received from update socket`);
     const data = matrixIO.malos.v1.io.EverloopImage.decode(buffer);
     debug(`data received from update socket: ${JSON.stringify(data)}`);
     matrixDeviceLeds = data.everloopLength;
 });
 
-// KEEP-ALIVE PORT \\
-// Create a Pusher socket
+debug(`setting up ping socket`);
 const pingSocket = zmq.socket("push");
-// Connect Pusher to Keep-alive port
 pingSocket.connect(`tcp://${matrixIP}:${(matrixEverloopBasePort + 1)}`);
-// Send a single ping
 pingSocket.send("");
-setInterval(() => {
-    pingSocket.send("");
-}, 1000);
 
-// ERROR PORT \\
-// Create a Subscriber socket
+debug(`setting up error socket`);
 const errorSocket = zmq.socket("sub");
-// Connect Subscriber to Error port
 errorSocket.connect(`tcp://${matrixIP}:${(matrixEverloopBasePort + 2)}`);
-// Connect Subscriber to Error port
 errorSocket.subscribe("");
-// On Message
 errorSocket.on("message", function(errorMessage) {
     debug(`Error received: ${errorMessage.toString("utf8")}`);
 });
 
 debug(`creating microphone instance`);
-const micInstance = mic({
-    "rate": 16000,
-    "channels": 1,
-    "debug": true
+const micInstance = matrix.alsa.mic({
+    "rate": '16000',
+    "debug": true,
+    "channels": '1'
 });
 debug(`got microphone instance ${JSON.stringify(micInstance)}`);
-debug(`getting audio stream`);
-const micInputStream = micInstance.getAudioStream();
 const outStream = VAD.createStream({
     "mode": VAD.Mode.NORMAL,
     "audioFrequency": 16000,
     "debounceTime": 1000
 });
-micInputStream.pipe(outStream).on("data", (data) => {
-    debug(`received data : ${JSON.stringify(data.speech)}`);
-});
+debug(`getting audio stream`);
+const micInputStream = micInstance.getAudioStream();
+micInputStream.pipe(outStream).on("data", handle);
 micInstance.start();
 
 setTimeout(() => { 
