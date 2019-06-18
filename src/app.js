@@ -18,7 +18,11 @@ const TRANSITIONS = {
 
 const matrixIP = "127.0.0.1";
 const matrixEverloopBasePort = 20021;
-const vad = new VAD(VAD.Mode.NORMAL);
+const vad = new VAD({
+    "mode": VAD.Mode.NORMAL,
+    "audioFrequency": 16000,
+    "debounceTime": 1000
+});
 let matrixDeviceLeds = 0;
 
 const ledAnimationFreq = 1000 / 60;
