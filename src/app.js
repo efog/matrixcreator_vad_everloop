@@ -127,7 +127,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
 
     debug(`transitionning to ${transition} from ${currentTransition}`);
     
-    const tween = easing.easeOutQuad;
+    const tween = easing.easeOutSine;
     let currentLedTarget = null;
     let time = 0;
 
