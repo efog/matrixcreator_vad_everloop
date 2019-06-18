@@ -25,7 +25,12 @@ let matrixDeviceLeds = 0;
 const ledAnimationFreq = 1000 / 60;
 let transitionInterval = null;
 let transitionTimeout = null;
-let currentLedState = null;
+let currentLedState = {
+    "red": 0,
+    "green": 0,
+    "blue": 0,
+    "white": 0
+};
 let currentTransition = TRANSITIONS.SILENCE;
 
 debug(`starting`);
