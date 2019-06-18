@@ -154,7 +154,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
         show(newLedState.red, newLedState.green, newLedState.blue, newLedState.white);
         currentLedState = newLedState;
         time += ledAnimationFreq;
-        if (time > duration) {    
+        if (time > duration + ledAnimationFreq * 3) {    
             clearInterval(transitionInterval);
             transitionInterval = null;
         }
