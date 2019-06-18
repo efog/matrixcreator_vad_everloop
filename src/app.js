@@ -144,6 +144,7 @@ function transitionTo(target = TRANSITIONS.SILENCE, duration = 500) {
             "blue": tween(time, blueStart, currentLedTarget.blue, duration),
             "white": tween(time, whiteStart, currentLedTarget.white, duration)
         };
+        debug(`animating from ${JSON.stringify(currentLedTarget)} to ${JSON.stringify(currentLedState)}`);
         show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
         time += ledAnimationFreq;
     }, ledAnimationFreq);
