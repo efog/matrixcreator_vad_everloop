@@ -206,13 +206,13 @@ info(`creating microphone instance`);
 const micInstance = matrix.alsa.mic({
     "rate": '16000',
     "debug": true,
-    "channels": '1'
+    "channels": '8'
 });
 debug(`got microphone instance ${JSON.stringify(micInstance)}`);
 const outStream = VAD.createStream({
     "mode": VAD.Mode.VERY_AGGRESSIVE,
     "audioFrequency": 16000,
-    "debounceTime": 3000
+    "debounceTime": 1500
 });
 info(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
