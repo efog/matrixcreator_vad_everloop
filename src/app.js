@@ -127,7 +127,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
 
     debug(`transitionning to ${transition} from ${currentTransition}`);
     
-    const tween = easing.easeOutSine;
+    const tween = easing.linearTween;
     let currentLedTarget = null;
     let time = 0;
 
@@ -145,10 +145,10 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
         debug(`blue:    ${time}, ${blueStart},  ${duration}`);
         debug(`white:   ${time}, ${whiteStart}, ${duration}`);
         const newLedState = {
-            "red": Math.floor(tween(time, redStart, currentLedTarget.red * (redStart > currentLedTarget.red ? 1 : -1), duration)),
-            "green": Math.floor(tween(time, greenStart, currentLedTarget.green * (greenStart > currentLedTarget.green ? 1 : -1), duration)),
-            "blue": Math.floor(tween(time, blueStart, currentLedTarget.blue * (blueStart > currentLedTarget.blue ? 1 : -1), duration)),
-            "white": Math.floor(tween(time, whiteStart, currentLedTarget.white * (whiteStart > currentLedTarget.white ? 1 : -1), duration))
+            "red": Math.floor(tween(time, redStart, currentLedTarget.red, duration)),
+            "green": Math.floor(tween(time, greenStart, currentLedTarget.green, duration)),
+            "blue": Math.floor(tween(time, blueStart, currentLedTarget.blue, duration)),
+            "white": Math.floor(tween(time, whiteStart, currentLedTarget.white, duration))
         };
         debug(`animating from ${JSON.stringify(currentLedState)} to ${JSON.stringify(newLedState)}`);
         show(newLedState.red, newLedState.green, newLedState.blue, newLedState.white);
