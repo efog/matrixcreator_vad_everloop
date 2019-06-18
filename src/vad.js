@@ -1,6 +1,7 @@
 const VAD = require("node-vad");
 const debug = require("debug")("app:test.js");
 const fs = require("fs");
+const matrix = require("@matrix-io/matrix-lite");
 const vad = new VAD(VAD.Mode.LOW_BITRATE);
 
 const fsOutStream = fs.createWriteStream("out/test.wav");
@@ -29,11 +30,12 @@ function handle(chunk) {
     });
 }
 
-const mic = require("mic");
+const mic = matrix.alsa.mic();
 const micInstance = mic({
-    "rate": 16000,
-    "channels": 1,
-    "debug": true
+    "rate": '16000',
+    "debug": true,
+    "exitOnSilence": 6,
+    "channels": '1'
 });
 
 const outStream = VAD.createStream({
