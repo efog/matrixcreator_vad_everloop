@@ -21,7 +21,7 @@ const matrixEverloopBasePort = 20021;
 const vad = new VAD(VAD.Mode.NORMAL);
 let matrixDeviceLeds = 0;
 
-const ledAnimationFreq = 1000 / 20;
+const ledAnimationFreq = 1000 / 60;
 let transitionInterval = null;
 let transitionTimeout = null;
 let currentLedState = {
@@ -145,10 +145,10 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
         debug(`blue:    ${time}, ${blueStart},  ${duration}`);
         debug(`white:   ${time}, ${whiteStart}, ${duration}`);
         const newLedState = {
-            "red": Math.floor(tween(time, redStart, currentLedTarget.red, duration)),
-            "green": Math.floor(tween(time, greenStart, currentLedTarget.green, duration)),
-            "blue": Math.floor(tween(time, blueStart, currentLedTarget.blue, duration)),
-            "white": Math.floor(tween(time, whiteStart, currentLedTarget.white, duration))
+            "red": Math.max(0, Math.floor(tween(time, redStart, currentLedTarget.red, duration))),
+            "green": Math.max(0, Math.floor(tween(time, greenStart, currentLedTarget.green, duration))),
+            "blue": Math.max(0, Math.floor(tween(time, blueStart, currentLedTarget.blue, duration))),
+            "white": Math.max(0, Math.floor(tween(time, whiteStart, currentLedTarget.white, duration)))
         };
         debug(`animating from ${JSON.stringify(currentLedState)} to ${JSON.stringify(newLedState)}`);
         show(newLedState.red, newLedState.green, newLedState.blue, newLedState.white);
@@ -158,7 +158,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
     transitionTimeout = setTimeout(() => {
         clearInterval(transitionInterval);
         transitionInterval = null;
-    }, duration + ledAnimationFreq * 2);
+    }, duration + ledAnimationFreq * 3);
 }
 
 /**
