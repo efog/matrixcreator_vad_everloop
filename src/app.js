@@ -71,7 +71,8 @@ function show(red = 0, green = 0, blue = 0, white = 0) {
  * @param {TRANSITIONS} target transition value
  * @returns {object} target transition
  */
-function getTransitionTarget(target) {
+function getTransitionTarget(target = TRANSITIONS.SILENCE) {
+    debug(`getting transition to ${target}`);
     switch (target) {
     case TRANSITIONS.VOICE:
         return {
@@ -132,12 +133,12 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
 
     currentTransition = transition;
 
-    currentLedTarget = getTransitionTarget(transition, currentLedTarget);
+    currentLedTarget = getTransitionTarget(transition);
+    debug(`animating to ${JSON.stringify(currentLedTarget)} from ${JSON.stringify(currentLedState)}`);
     const redStart = currentLedState.red;
     const greenStart = currentLedState.green;
     const blueStart = currentLedState.blue;
     const whiteStart = currentLedState.white;
-    debug(`animating to ${JSON.stringify(currentLedTarget)}`);
     transitionInterval = setInterval(() => {
         currentLedState = {
             "red": Math.floor(tween(time, redStart, currentLedTarget.red, duration)),
