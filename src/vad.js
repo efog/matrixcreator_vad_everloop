@@ -44,8 +44,8 @@ const outStream = VAD.createStream({
 });
 
 const micInputStream = micInstance.getAudioStream();
-micInputStream.pipe(fsOutStream);
-// micInputStream.pipe(outStream).on("data", handle);
+// micInputStream.pipe(fsOutStream);
+micInputStream.pipe(outStream).on("data", handle);
 
 micInputStream.on("error", function (err) {
     console.log(`Error in Input Stream: ${err}`);
