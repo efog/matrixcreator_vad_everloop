@@ -3,12 +3,18 @@
 /* eslint-disable id-length */
 
 module.exports.linearTween = function (t, b, c, d) {
-    return c * t / d + b;
+    if (c > b) {
+        return c * t / d + b;
+    }
+    return b - (b * t / d + c);
 };
 
 module.exports.easeInQuad = function (t, b, c, d) {
     t /= d;
-    return c * t * t + b;
+    if (c > b) {
+        return c * t * t + b;
+    }
+    return b - (b * t * t + c);
 };
 
 module.exports.easeInOutQuad = function (t, b, c, d) {
