@@ -9,7 +9,6 @@ const matrix = require("@matrix-io/matrix-lite");
 const matrixIO = require("matrix-protos").matrix_io;
 const zmq = require("zeromq");
 
-
 const TRANSITIONS = {
     "SILENCE": 0,
     "VOICE": 1,
@@ -105,6 +104,8 @@ function getTransitionTarget(target) {
     }
 }
 
+let transitionTriggerTimeout = null;
+
 /**
  * Transition led color
  * @param {object} target leds color target
@@ -113,53 +114,59 @@ function getTransitionTarget(target) {
  * @returns {undefined}
  */
 function transitionTo(target = TRANSITIONS.SILENCE, duration = 500) {
-    if (target === currentTransition) {
-        debug(`no transition change: ${target} === ${currentTransition}`);
-        return;
+    if (!transitionTriggerTimeout) {
+        transitionTriggerTimeout = setTimeout(() => {
+            if (target === currentTransition) {
+                return;
+            }
+            debug(`transitionning to ${target} from ${currentTransition}`);
+            currentTransition = target;
+            if (transitionInterval) {
+                debug(`clearing transition interval`);
+                clearInterval(transitionInterval);
+                transitionInterval = null;
+            }
+            if (transitionTimeout) {
+                debug(`clearing transition timeout`);
+                clearTimeout(transitionTimeout);
+                transitionTimeout = null;
+            }
+
+            const tween = easing.easeInOutSine;
+            let currentLedTarget = null;
+            let time = 0;
+            currentLedTarget = getTransitionTarget(target, currentLedTarget);
+            const redStart = currentLedState.red;
+            const greenStart = currentLedState.green;
+            const blueStart = currentLedState.blue;
+            const whiteStart = currentLedState.white;
+            transitionInterval = setInterval(() => {
+                currentLedState = {
+                    "red": tween(time, redStart, currentLedTarget.red, duration),
+                    "green": tween(time, greenStart, currentLedTarget.green, duration),
+                    "blue": tween(time, blueStart, currentLedTarget.blue, duration),
+                    "white": tween(time, whiteStart, currentLedTarget.white, duration)
+                };
+                debug(`animating from ${JSON.stringify(currentLedTarget)} to ${JSON.stringify(currentLedState)}`);
+                show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
+                time += ledAnimationFreq;
+            }, ledAnimationFreq);
+            transitionTimeout = setTimeout(() => {
+                clearInterval(transitionInterval);
+                transitionInterval = null;
+            }, duration);
+            clearTimeout(transitionTriggerTimeout);
+            transitionTriggerTimeout = null;
+        }, 100);
     }
-    debug(`transitionning to ${target} from ${currentTransition}`);
-    currentTransition = target;
-    if (transitionInterval) {
-        debug(`clearing transition interval`);
-        clearInterval(transitionInterval);
-        transitionInterval = null;
-    }
-    if (transitionTimeout) {
-        debug(`clearing transition timeout`);
-        clearTimeout(transitionTimeout);
-        transitionTimeout = null;
-    }
-    const tween = easing.easeInOutSine;
-    let currentLedTarget = null;
-    let time = 0;
-    currentLedTarget = getTransitionTarget(target, currentLedTarget);
-    const redStart = currentLedState.red;
-    const greenStart = currentLedState.green;
-    const blueStart = currentLedState.blue;
-    const whiteStart = currentLedState.white;
-    transitionInterval = setInterval(() => {
-        currentLedState = {
-            "red": tween(time, redStart, currentLedTarget.red, duration),
-            "green": tween(time, greenStart, currentLedTarget.green, duration),
-            "blue": tween(time, blueStart, currentLedTarget.blue, duration),
-            "white": tween(time, whiteStart, currentLedTarget.white, duration)
-        };
-        debug(`animating from ${JSON.stringify(currentLedTarget)} to ${JSON.stringify(currentLedState)}`);
-        show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
-        time += ledAnimationFreq;
-    }, ledAnimationFreq);
-    transitionTimeout = setTimeout(() => {
-        clearInterval(transitionInterval);
-        transitionInterval = null;
-    }, duration);
 }
 
 /**
- * Handle audio stream chunk
- *
- * @param {*} chunk audio stream chunk
- * @returns {undefined}
- */
+     * Handle audio stream chunk
+     *
+     * @param {*} chunk audio stream chunk
+     * @returns {undefined}
+     */
 function handle(chunk) {
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
