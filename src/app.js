@@ -158,7 +158,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
     transitionTimeout = setTimeout(() => {
         clearInterval(transitionInterval);
         transitionInterval = null;
-    }, duration + ledAnimationFreq);
+    }, duration + ledAnimationFreq * 2);
 }
 
 /**
