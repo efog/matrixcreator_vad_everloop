@@ -1,10 +1,11 @@
 {
   "name": "matrixcreator_vad_everloop",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A simple voice detection app echoing activity on Everloop leds",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jasmine",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
