@@ -1,4 +1,4 @@
-FROM arm32v7/node:8.6.0
+FROM arm32v7/node:8.6.0-stretch
 
 RUN curl https://apt.matrix.one/doc/apt-key.gpg | apt-key add -
 RUN echo "deb https://apt.matrix.one/raspbian $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/matrixlabs.list
