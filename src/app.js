@@ -160,7 +160,6 @@ function transitionTo(target = TRANSITIONS.SILENCE, duration = 500) {
  * @returns {undefined}
  */
 function handle(chunk) {
-    debug(`${JSON.stringify(chunk)}`);
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
         case VAD.Event.ERROR:
