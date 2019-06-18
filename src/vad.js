@@ -30,8 +30,7 @@ function handle(chunk) {
     });
 }
 
-const mic = matrix.alsa.mic();
-const micInstance = mic({
+const micInstance = matrix.alsa.mic({
     "rate": '16000',
     "debug": true,
     "exitOnSilence": 6,
