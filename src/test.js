@@ -35,10 +35,12 @@ const micInstance = mic({
 });
 
 const micInputStream = micInstance.getAudioStream();
+debug(JSON.stringify(micInputStream));
 const outStream = fs.createWriteStream("out.wav");
 micInputStream.pipe(outStream).on("data", (data) => {
     debug(`received data : ${data}`);
 });
+micInstance.start();
 
 const stream = fs.createReadStream("recording.wav");
 stream.on("data", handle);
