@@ -6,7 +6,7 @@ const vad = new VAD(VAD.Mode.NORMAL);
 // eslint-disable-next-line require-jsdoc
 function handle(chunk) {
     console.log(chunk);
-    vad.processAudio(chunk, 16000).then((res) => {
+    vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
         case VAD.Event.ERROR:
             console.log("ERROR");
