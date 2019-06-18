@@ -18,11 +18,7 @@ const TRANSITIONS = {
 
 const matrixIP = "127.0.0.1";
 const matrixEverloopBasePort = 20021;
-const vad = new VAD({
-    "mode": VAD.Mode.NORMAL,
-    "audioFrequency": 16000,
-    "debounceTime": 1000
-});
+const vad = new VAD(VAD.Mode.NORMAL);
 let matrixDeviceLeds = 0;
 
 const ledAnimationFreq = 1000 / 60;
@@ -166,11 +162,11 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
 }
 
 /**
-     * Handle audio stream chunk
-     *
-     * @param {*} chunk audio stream chunk
-     * @returns {undefined}
-     */
+ * Handle audio stream chunk
+ *
+ * @param {*} chunk audio stream chunk
+ * @returns {undefined}
+ */
 function handle(chunk) {
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
@@ -232,5 +228,5 @@ const outStream = VAD.createStream({
 });
 info(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
-micInputStream.pipe(outStream).on("data", handle);
+micInputStream.pipe(outStream).on("data", console.log);
 micInstance.start();
