@@ -22,7 +22,7 @@ const matrixEverloopBasePort = 20021;
 const vad = new VAD(VAD.Mode.NORMAL);
 let matrixDeviceLeds = 0;
 
-const ledAnimationFreq = 1000 / 60;
+const ledAnimationFreq = 1000 / 20;
 let transitionInterval = null;
 let transitionTimeout = null;
 let currentLedState = {
@@ -114,14 +114,18 @@ function getTransitionTarget(target) {
  */
 function transitionTo(target = TRANSITIONS.SILENCE, duration = 500) {
     if (target === currentTransition) {
+        debug(`no transition change: ${target} === ${currentTransition}`);
         return;
     }
+    debug(`transitionning to ${target} from ${currentTransition}`);
     currentTransition = target;
     if (transitionInterval) {
+        debug(`clearing transition interval`);
         clearInterval(transitionInterval);
         transitionInterval = null;
     }
     if (transitionTimeout) {
+        debug(`clearing transition timeout`);
         clearTimeout(transitionTimeout);
         transitionTimeout = null;
     }
@@ -176,6 +180,8 @@ function handle(chunk) {
         }
     });
 }
+
+show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
 
 info(`setting up update socket`);
 const updateSocket = zmq.socket("sub");
