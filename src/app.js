@@ -154,11 +154,11 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
         show(newLedState.red, newLedState.green, newLedState.blue, newLedState.white);
         currentLedState = newLedState;
         time += ledAnimationFreq;
+        if (time > duration) {    
+            clearInterval(transitionInterval);
+            transitionInterval = null;
+        }
     }, ledAnimationFreq);
-    transitionTimeout = setTimeout(() => {
-        clearInterval(transitionInterval);
-        transitionInterval = null;
-    }, duration + ledAnimationFreq * 3);
 }
 
 /**
