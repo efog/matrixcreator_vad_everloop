@@ -174,24 +174,6 @@ function handle(chunk) {
     else {
         transitionTo(TRANSITIONS.SILENCE);
     }
-    // vad.processAudio(chunk.audioData, 16000).then((res) => {
-    //     switch (res) {
-    //     case VAD.Event.ERROR:
-    //         transitionTo(TRANSITIONS.ERROR);
-    //         break;
-    //     case VAD.Event.NOISE:
-    //         transitionTo(TRANSITIONS.NOISE);
-    //         break;
-    //     case VAD.Event.SILENCE:
-    //         transitionTo(TRANSITIONS.SILENCE);
-    //         break;
-    //     case VAD.Event.VOICE:
-    //         transitionTo(TRANSITIONS.VOICE);
-    //         break;
-    //     default:
-    //         console.log("WTF");
-    //     }
-    // });
 }
 
 show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
@@ -228,9 +210,9 @@ const micInstance = matrix.alsa.mic({
 });
 debug(`got microphone instance ${JSON.stringify(micInstance)}`);
 const outStream = VAD.createStream({
-    "mode": VAD.Mode.NORMAL,
+    "mode": VAD.Mode.VERY_AGGRESSIVE,
     "audioFrequency": 16000,
-    "debounceTime": 1000
+    "debounceTime": 3000
 });
 info(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
