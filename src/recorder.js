@@ -9,16 +9,16 @@ const micInstance = mic({
 });
 const micInputStream = micInstance.getAudioStream();
 
-const outputFileStream = fs.WriteStream("output.raw");
+const outputFileStream = fs.WriteStream("out/output.wav");
 
 micInputStream.pipe(outputFileStream);
 
 micInputStream.on("data", function (data) {
-    console.log("Recieved Input Stream: " + data.length);
+    console.log(`Recieved Input Stream: ${data.length}`);
 });
 
 micInputStream.on("error", function (err) {
-    console.log("Error in Input Stream: " + err);
+    console.log(`Error in Input Stream: ${err}`);
 });
 
 micInputStream.on("startComplete", function () {
