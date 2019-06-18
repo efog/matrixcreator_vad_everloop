@@ -1,4 +1,4 @@
-name: matrixcreator_vad_everloop.$(Build.SourceBranchName).$(Year:yy).$(DayOfYear).$(Rev:rr)
+name: matrixcreator_vad_everloop.$(Build.SourceBranchName).$(Year:yy)-$(DayOfYear)-$(Rev:rr)
 trigger:
 - master
 pool:
@@ -10,7 +10,7 @@ steps:
       azureSubscription: 'MSDN Dev (77cb899b-2a8d-4245-bf65-7576de225f1d)'
       azureContainerRegistry: '{"loginServer":"efogcontainers.azurecr.io", "id" : "/subscriptions/77cb899b-2a8d-4245-bf65-7576de225f1d/resourceGroups/efog.acs/providers/Microsoft.ContainerRegistry/registries/efogcontainers"}'
       dockerFile: DOCKERFILE
-      imageName: 'matrixcreator_vad_everloop:$(Year:yy).$(DayOfYear).$(Rev:rr)'
+      imageName: 'matrixcreator_vad_everloop:$(Year:yy)-$(DayOfYear)-$(Rev:rr)'
       includeLatestTag: true
   - task: Docker@0
     displayName: 'Push an image'
@@ -18,5 +18,5 @@ steps:
       azureSubscription: 'MSDN Dev (77cb899b-2a8d-4245-bf65-7576de225f1d)'
       azureContainerRegistry: '{"loginServer":"efogcontainers.azurecr.io", "id" : "/subscriptions/77cb899b-2a8d-4245-bf65-7576de225f1d/resourceGroups/efog.acs/providers/Microsoft.ContainerRegistry/registries/efogcontainers"}'
       action: 'Push an image'
-      imageName: 'matrixcreator_vad_everloop:$(Year:yy).$(DayOfYear).$(Rev:rr)'
+      imageName: 'matrixcreator_vad_everloop:$(Year:yy)-$(DayOfYear)-$(Rev:rr)'
       includeLatestTag: true
