@@ -132,17 +132,18 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
     let time = 0;
 
     currentTransition = transition;
-
-    currentLedTarget = getTransitionTarget(transition);
+    currentLedTarget = getTransitionTarget(currentTransition);
+    debug(`target: ${JSON.stringify(currentLedTarget)}`);
     const redStart = currentLedState.red;
     const greenStart = currentLedState.green;
     const blueStart = currentLedState.blue;
     const whiteStart = currentLedState.white;
+    
     transitionInterval = setInterval(() => {        
-        debug(`red:     ${time}, ${redStart},   ${currentLedTarget.red},    ${duration}`);
-        debug(`green:   ${time}, ${greenStart}, ${currentLedTarget.green},  ${duration}`);
-        debug(`blue:    ${time}, ${blueStart},  ${currentLedTarget.blue},   ${duration}`);
-        debug(`white:   ${time}, ${whiteStart}, ${currentLedTarget.white},  ${duration}`);
+        debug(`red:     ${time}, ${redStart},   ${duration}`);
+        debug(`green:   ${time}, ${greenStart}, ${duration}`);
+        debug(`blue:    ${time}, ${blueStart},  ${duration}`);
+        debug(`white:   ${time}, ${whiteStart}, ${duration}`);
         const newLedState = {
             "red": Math.floor(tween(time, redStart, currentLedTarget.red, duration)),
             "green": Math.floor(tween(time, greenStart, currentLedTarget.green, duration)),
