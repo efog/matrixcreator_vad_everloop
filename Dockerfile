@@ -1,7 +1,4 @@
-FROM resin/rpi-raspbian
-
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-RUN nvm install 8.6
+FROM arm32v7/node:8.6.0
 
 WORKDIR /usr/src/app
 COPY src/package*.json ./
