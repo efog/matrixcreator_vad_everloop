@@ -168,24 +168,30 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
  * @returns {undefined}
  */
 function handle(chunk) {
-    vad.processAudio(chunk.audioData, 16000).then((res) => {
-        switch (res) {
-        case VAD.Event.ERROR:
-            transitionTo(TRANSITIONS.ERROR);
-            break;
-        case VAD.Event.NOISE:
-            transitionTo(TRANSITIONS.NOISE);
-            break;
-        case VAD.Event.SILENCE:
-            transitionTo(TRANSITIONS.SILENCE);
-            break;
-        case VAD.Event.VOICE:
-            transitionTo(TRANSITIONS.VOICE);
-            break;
-        default:
-            console.log("WTF");
-        }
-    });
+    if (chunk && chunk.speech.state) {
+        transitionTo(TRANSITIONS.VOICE);
+    }
+    else {
+        transitionTo(TRANSITIONS.SILENCE);
+    }
+    // vad.processAudio(chunk.audioData, 16000).then((res) => {
+    //     switch (res) {
+    //     case VAD.Event.ERROR:
+    //         transitionTo(TRANSITIONS.ERROR);
+    //         break;
+    //     case VAD.Event.NOISE:
+    //         transitionTo(TRANSITIONS.NOISE);
+    //         break;
+    //     case VAD.Event.SILENCE:
+    //         transitionTo(TRANSITIONS.SILENCE);
+    //         break;
+    //     case VAD.Event.VOICE:
+    //         transitionTo(TRANSITIONS.VOICE);
+    //         break;
+    //     default:
+    //         console.log("WTF");
+    //     }
+    // });
 }
 
 show(currentLedState.red, currentLedState.green, currentLedState.blue, currentLedState.white);
@@ -228,6 +234,6 @@ const outStream = VAD.createStream({
 });
 info(`getting audio stream`);
 const micInputStream = micInstance.getAudioStream();
-// micInputStream.pipe(outStream).on("data", console.log);
-micInputStream.on("data", console.log);
+micInputStream.pipe(outStream).on("data", handle);
+// micInputStream.on("data", console.log);
 micInstance.start();
