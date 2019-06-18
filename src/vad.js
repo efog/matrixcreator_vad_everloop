@@ -3,8 +3,11 @@ const debug = require("debug")("app:test.js");
 const fs = require("fs");
 const vad = new VAD(VAD.Mode.LOW_BITRATE);
 
+const fsOutStream = fs.createWriteStream("out/test.wav");
+
 // eslint-disable-next-line require-jsdoc
 function handle(chunk) {
+    fsOutStream.write(chunk.audioData);
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
         case VAD.Event.ERROR:
@@ -48,9 +51,6 @@ micInputStream.on("error", function (err) {
 
 micInputStream.on("startComplete", function () {
     console.log("Got SIGNAL startComplete");
-    setTimeout(function () {
-        micInstance.pause();
-    }, 5000);
 });
 
 micInputStream.on("stopComplete", function () {
@@ -59,16 +59,10 @@ micInputStream.on("stopComplete", function () {
 
 micInputStream.on("pauseComplete", function () {
     console.log("Got SIGNAL pauseComplete");
-    setTimeout(function () {
-        micInstance.resume();
-    }, 5000);
 });
 
 micInputStream.on("resumeComplete", function () {
     console.log("Got SIGNAL resumeComplete");
-    setTimeout(function () {
-        micInstance.stop();
-    }, 5000);
 });
 
 micInputStream.on("silence", function () {
