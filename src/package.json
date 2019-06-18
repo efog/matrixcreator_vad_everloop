@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/efog/matrixcreator_vad_everloop#readme",
   "dependencies": {
+    "@matrix-io/matrix-lite": "^0.4.3",
     "debug": "^4.1.1",
     "eslint": "^5.16.0",
     "matrix-protos": "0.0.28",
