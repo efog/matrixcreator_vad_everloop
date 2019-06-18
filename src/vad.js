@@ -1,11 +1,10 @@
 const VAD = require("node-vad");
 const debug = require("debug")("app:test.js");
 const fs = require("fs");
-const vad = new VAD(VAD.Mode.NORMAL);
+const vad = new VAD(VAD.Mode.LOW_BITRATE);
 
 // eslint-disable-next-line require-jsdoc
 function handle(chunk) {
-    console.log(chunk);
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
         case VAD.Event.ERROR:
