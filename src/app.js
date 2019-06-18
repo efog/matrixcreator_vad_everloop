@@ -54,16 +54,16 @@ function handle(chunk) {
     vad.processAudio(chunk.audioData, 16000).then((res) => {
         switch (res) {
         case VAD.Event.ERROR:
-            console.log("ERROR");
+            show(100, 0, 0, 0); 
             break;
         case VAD.Event.NOISE:
-            console.log("NOISE");
+            show(0, 100, 100, 0); 
             break;
         case VAD.Event.SILENCE:
-            console.log("SILENCE");
+            show(0, 0, 0, 0); 
             break;
         case VAD.Event.VOICE:
-            console.log("VOICE");
+            show(0, 100, 0, 0); 
             break;
         default:
             console.log("WTF");
