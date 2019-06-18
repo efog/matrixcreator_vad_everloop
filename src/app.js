@@ -127,7 +127,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
 
     debug(`transitionning to ${transition} from ${currentTransition}`);
     
-    const tween = easing.easeInQuad;
+    const tween = easing.easeOutQuad;
     let currentLedTarget = null;
     let time = 0;
 
@@ -138,7 +138,7 @@ function transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
     const greenStart = currentLedState.green;
     const blueStart = currentLedState.blue;
     const whiteStart = currentLedState.white;
-    
+
     transitionInterval = setInterval(() => {        
         debug(`red:     ${time}, ${redStart},   ${duration}`);
         debug(`green:   ${time}, ${greenStart}, ${duration}`);
