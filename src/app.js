@@ -76,10 +76,10 @@ function getTransitionTarget(target = TRANSITIONS.SILENCE) {
     switch (target) {
     case TRANSITIONS.VOICE:
         return {
-            "red": 0,
+            "red": 50,
             "green": 100,
-            "blue": 0,
-            "white": 0
+            "blue": 110,
+            "white": 10
         };
     case TRANSITIONS.ERROR:
         return {
