@@ -51,7 +51,10 @@ class Vad extends EventEmitter {
         info(`getting audio stream`);
         const micInputStream = this._micInstance.getAudioStream();
         micInputStream.pipe(outStream).on("data", this.handle);
-        micInputStream.on("error", this.start());
+        micInputStream.on("error", (err) => {
+            error(JSON.stringify(err));
+            this.start();
+        });
         this._micInstance.start();
     }
 }
