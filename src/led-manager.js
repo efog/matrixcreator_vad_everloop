@@ -168,9 +168,9 @@ class LedManager {
 
         this._updateSocket = zmq.socket("sub");
         this._updatePort = this._matrixEverloopBasePort + 3;
-        this._updatePort.connect(`tcp://${this._matrixIP}:${this._updatePort}`);
-        this._updatePort.subscribe("");
-        this._updatePort.on("message", (buffer) => {
+        this._updateSocket.connect(`tcp://${this._matrixIP}:${this._updatePort}`);
+        this._updateSocket.subscribe("");
+        this._updateSocket.on("message", (buffer) => {
             const data = matrixIO.malos.v1.io.EverloopImage.decode(buffer);
             debug(`data received from update socket: ${JSON.stringify(data)}`);
             this._matrixDeviceLeds = data.everloopLength;
