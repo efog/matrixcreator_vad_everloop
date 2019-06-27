@@ -25,9 +25,6 @@ describe("easing functions", () => {
 
         const initialValue = func(0, start, end, duration);
         expect(initialValue).toEqual(start);
-        for (let index = 0; index < 100; index++) {
-            debug(`${index} ${func(index, start, end, duration)}`);
-        }
         const lastValue = func(100, start, end, duration);
         expect(lastValue).toEqual(end);
         done();
