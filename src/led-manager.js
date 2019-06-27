@@ -110,7 +110,6 @@ class LedManager {
      */
     transitionTo(transition = TRANSITIONS.SILENCE, duration = 500) {
         
-        debug(`requesting transition to ${transition}`);
         if (transition === this._currentTransition) {
             return;
         }
