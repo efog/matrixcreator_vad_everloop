@@ -10,8 +10,5 @@ info(`starting application`);
 const ledManager = new LedManager();
 ledManager.start();
 const vad = new Vad();
-vad.on("activity", (activity) => {
-    debug(`received activity ${activity}`);
-    ledManager.transitionTo(activity);
-});
+vad.on("activity", ledManager.transitionTo);
 vad.start();
