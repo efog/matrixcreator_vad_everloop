@@ -27,6 +27,7 @@ class Vad extends EventEmitter {
      * @returns {undefined}
      */
     handle(chunk) {
+        debug(`received chunk ${JSON.stringify(chunk)}`);
         if (chunk && chunk.speech.state) {
             this.emit("activity", TRANSITIONS.VOICE);
         }
@@ -37,25 +38,25 @@ class Vad extends EventEmitter {
 
     start() {
         info(`creating microphone instance`);
-        this._micInstance = matrix.alsa.mic({
+        const micInstance = matrix.alsa.mic({
             "rate": '16000',
             "debug": true,
             "channels": '8'
         });
-        debug(`got microphone instance ${JSON.stringify(this._micInstance)}`);
+        debug(`got microphone instance ${JSON.stringify(micInstance)}`);
         const outStream = VAD.createStream({
             "mode": VAD.Mode.VERY_AGGRESSIVE,
             "audioFrequency": 16000,
             "debounceTime": 1500
         });
         info(`getting audio stream`);
-        const micInputStream = this._micInstance.getAudioStream();
+        const micInputStream = micInstance.getAudioStream();
         micInputStream.pipe(outStream).on("data", this.handle);
         micInputStream.on("error", (err) => {
             error(JSON.stringify(err));
             this.start();
         });
-        this._micInstance.start();
+        micInstance.start();
     }
 }
 
