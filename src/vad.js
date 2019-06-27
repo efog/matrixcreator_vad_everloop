@@ -27,7 +27,6 @@ class Vad extends EventEmitter {
      * @returns {undefined}
      */
     handle(chunk) {
-        debug(`received chunk ${JSON.stringify(chunk)}`);
         if (chunk && chunk.speech.state) {
             this.emit("activity", TRANSITIONS.VOICE);
         }
