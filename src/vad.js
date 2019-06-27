@@ -44,7 +44,7 @@ class Vad extends EventEmitter {
         });
         debug(`got microphone instance ${JSON.stringify(micInstance)}`);
         const outStream = VAD.createStream({
-            "mode": VAD.Mode.VERY_AGGRESSIVE,
+            "mode": VAD.Mode.NORMAL,
             "audioFrequency": 16000,
             "debounceTime": 1500
         });
